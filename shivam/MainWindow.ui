@@ -1,0 +1,605 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>896</width>
+    <height>414</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: #1C1F21;
+</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QLabel" name="label_17">
+    <property name="geometry">
+     <rect>
+      <x>260</x>
+      <y>20</y>
+      <width>31</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font-family: 'Orbitron', sans-serif;
+color: #39FF14;
+font-size: 5pt;
+text-align: center; 
+
+font-weight: bold; </string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_12">
+    <property name="geometry">
+     <rect>
+      <x>480</x>
+      <y>20</y>
+      <width>31</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font-family: 'Orbitron', sans-serif;
+color: #39FF14;
+font-size: 5pt;
+text-align: center; 
+
+font-weight: bold; </string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QWidget" name="layoutWidget_2">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>190</y>
+      <width>141</width>
+      <height>141</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="styleSheet">
+        <string notr="true">border: 1px solid #39FF14;
+
+
+</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLabel" name="label_3">
+       <property name="styleSheet">
+        <string notr="true">border: 1px solid #39FF14;
+
+
+</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label">
+       <property name="styleSheet">
+        <string notr="true">border: 1px solid #39FF14;
+
+
+</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLabel" name="label_5">
+       <property name="styleSheet">
+        <string notr="true">border: 1px solid #39FF14;
+
+
+</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QLabel" name="label_30">
+    <property name="geometry">
+     <rect>
+      <x>430</x>
+      <y>20</y>
+      <width>41</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font-family: 'Orbitron', sans-serif;
+color: #39FF14;
+font-size: 5pt;
+text-align: center; 
+border: 1px solid #4CAF50;
+font-weight: bold; </string>
+    </property>
+    <property name="text">
+     <string>Battery</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_13">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>20</y>
+      <width>51</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font-family: 'Orbitron', sans-serif;
+color: #39FF14;
+font-size: 5pt;
+text-align: center; 
+
+font-weight: bold; </string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_28">
+    <property name="geometry">
+     <rect>
+      <x>520</x>
+      <y>20</y>
+      <width>71</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font-family: 'Orbitron', sans-serif;
+color: #39FF14;
+font-size: 5pt;
+text-align: center; 
+border: 1px solid #4CAF50;
+font-weight: bold; </string>
+    </property>
+    <property name="text">
+     <string>Distance To GCS</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_2">
+    <property name="geometry">
+     <rect>
+      <x>740</x>
+      <y>361</y>
+      <width>101</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font-family: 'Orbitron', sans-serif;
+color: #39FF14;
+font-size: 5pt;
+text-align: center; 
+border: 1px solid #4CAF50;
+font-weight: bold; </string>
+    </property>
+    <property name="text">
+     <string>Dashboard</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_29">
+    <property name="geometry">
+     <rect>
+      <x>210</x>
+      <y>20</y>
+      <width>41</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font-family: 'Orbitron', sans-serif;
+color: #39FF14;
+font-size: 5pt;
+text-align: center; 
+border: 1px solid #4CAF50;
+font-weight: bold; </string>
+    </property>
+    <property name="text">
+     <string>Satellite</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_6">
+    <property name="geometry">
+     <rect>
+      <x>100</x>
+      <y>20</y>
+      <width>41</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font-family: 'Orbitron', sans-serif;
+color: #39FF14;
+font-size: 5pt;
+text-align: center; 
+border: 1px solid #4CAF50;
+font-weight: bold; </string>
+    </property>
+    <property name="text">
+     <string>Mode</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_7">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>20</y>
+      <width>41</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font-family: 'Orbitron', sans-serif;
+color: #39FF14;
+font-size: 5pt;
+text-align: center; 
+border: 1px solid #4CAF50;
+font-weight: bold; </string>
+    </property>
+    <property name="text">
+     <string> Status</string>
+    </property>
+   </widget>
+   <widget class="QTextBrowser" name="TIME">
+    <property name="geometry">
+     <rect>
+      <x>800</x>
+      <y>30</y>
+      <width>61</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font-family: 'Orbitron', sans-serif;
+color: #39FF14;
+font-size: 5pt;
+text-align: center; 
+border: 1px solid #4CAF50;
+font-weight: bold; </string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_3">
+    <property name="geometry">
+     <rect>
+      <x>650</x>
+      <y>10</y>
+      <width>61</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::RightToLeft</enum>
+    </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>77</width>
+      <height>60</height>
+     </size>
+    </property>
+   </widget>
+   <widget class="QTextBrowser" name="DATE">
+    <property name="geometry">
+     <rect>
+      <x>800</x>
+      <y>10</y>
+      <width>61</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font-family: 'Orbitron', sans-serif;
+color: #39FF14;
+font-size: 5pt;
+text-align: center; 
+border: 1px solid #4CAF50;
+font-weight: bold; </string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_22">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>60</y>
+      <width>141</width>
+      <height>121</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font-family: 'Orbitron', sans-serif;
+color: #39FF14;
+font-size: 14pt;
+text-align: center; 
+border: 1px solid #39FF14;
+font-weight: bold; 
+background-color: rbga(0,0,0,0);</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QWidget" name="webEngineViewPlaceholder_2" native="true">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>60</y>
+      <width>681</width>
+      <height>351</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_23">
+    <property name="geometry">
+     <rect>
+      <x>600</x>
+      <y>20</y>
+      <width>31</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font-family: 'Orbitron', sans-serif;
+color: #39FF14;
+font-size: 5pt;
+text-align: center; 
+
+font-weight: bold; </string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_8">
+    <property name="geometry">
+     <rect>
+      <x>300</x>
+      <y>21</y>
+      <width>121</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font-family: 'Orbitron', sans-serif;
+color: red;
+font-size: 15pt;
+text-align: center; 
+
+font-weight: bold; </string>
+    </property>
+    <property name="text">
+     <string>KAMIKAZE</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_4">
+    <property name="geometry">
+     <rect>
+      <x>740</x>
+      <y>331</y>
+      <width>101</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font-family: 'Orbitron', sans-serif;
+color: #39FF14;
+font-size: 5pt;
+text-align: center; 
+border: 1px solid #4CAF50;
+font-weight: bold; </string>
+    </property>
+    <property name="text">
+     <string>Geofence</string>
+    </property>
+   </widget>
+   <widget class="QWidget" name="webEngineViewPlaceholder" native="true">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>70</y>
+      <width>141</width>
+      <height>111</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+   </widget>
+   <widget class="QWidget" name="layoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>340</y>
+      <width>141</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout_2">
+     <item row="0" column="0">
+      <widget class="QLabel" name="label_18">
+       <property name="styleSheet">
+        <string notr="true">font-family: 'Orbitron', sans-serif;
+color: #39FF14;
+font-size: 5pt;
+text-align: center; 
+border: 1px solid #4CAF50;
+font-weight: bold; </string>
+       </property>
+       <property name="text">
+        <string>Lat</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLabel" name="label_4">
+       <property name="styleSheet">
+        <string notr="true">font-family: 'Orbitron', sans-serif;
+color: #39FF14;
+font-size: 5pt;
+text-align: center; 
+border: 1px solid #4CAF50;
+font-weight: bold; </string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QLabel" name="label_20">
+       <property name="styleSheet">
+        <string notr="true">font-family: 'Orbitron', sans-serif;
+color: #39FF14;
+font-size: 5pt;
+text-align: center; 
+border: 1px solid #4CAF50;
+font-weight: bold; </string>
+       </property>
+       <property name="text">
+        <string>Long</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="3">
+      <widget class="QLabel" name="label_16">
+       <property name="styleSheet">
+        <string notr="true">font-family: 'Orbitron', sans-serif;
+color: #39FF14;
+font-size: 5pt;
+text-align: center; 
+border: 1px solid #4CAF50;
+font-weight: bold; </string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_19">
+       <property name="styleSheet">
+        <string notr="true">font-family: 'Orbitron', sans-serif;
+color: #39FF14;
+font-size: 5pt;
+text-align: center; 
+border: 1px solid #4CAF50;
+font-weight: bold; </string>
+       </property>
+       <property name="text">
+        <string>Alt</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLabel" name="label_14">
+       <property name="styleSheet">
+        <string notr="true">font-family: 'Orbitron', sans-serif;
+color: #39FF14;
+font-size: 5pt;
+text-align: center; 
+border: 1px solid #4CAF50;
+font-weight: bold; </string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QLabel" name="label_21">
+       <property name="styleSheet">
+        <string notr="true">font-family: 'Orbitron', sans-serif;
+color: #39FF14;
+font-size: 5pt;
+text-align: center; 
+border: 1px solid #4CAF50;
+font-weight: bold; </string>
+       </property>
+       <property name="text">
+        <string>Speed</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="3">
+      <widget class="QLabel" name="label_15">
+       <property name="styleSheet">
+        <string notr="true">font-family: 'Orbitron', sans-serif;
+color: #39FF14;
+font-size: 5pt;
+text-align: center; 
+border: 1px solid #4CAF50;
+font-weight: bold; </string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <zorder>label_17</zorder>
+   <zorder>label_12</zorder>
+   <zorder>layoutWidget_2</zorder>
+   <zorder>label_30</zorder>
+   <zorder>label_13</zorder>
+   <zorder>label_28</zorder>
+   <zorder>label_29</zorder>
+   <zorder>label_6</zorder>
+   <zorder>label_7</zorder>
+   <zorder>TIME</zorder>
+   <zorder>pushButton_3</zorder>
+   <zorder>DATE</zorder>
+   <zorder>webEngineViewPlaceholder_2</zorder>
+   <zorder>label_23</zorder>
+   <zorder>label_8</zorder>
+   <zorder>pushButton_4</zorder>
+   <zorder>webEngineViewPlaceholder</zorder>
+   <zorder>layoutWidget</zorder>
+   <zorder>label_22</zorder>
+   <zorder>pushButton_2</zorder>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

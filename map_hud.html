@@ -1,0 +1,245 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="format-detection" content="telephone=no">
+    <title>Hud</title>
+    <script src="http://smoothiecharts.org/smoothie.js"></script>
+    <script src="/mav/Cesium/Cesium.js"></script>
+    <script src="/mav/bundle.js"></script>
+
+    <style>
+        @import url(/mav/Cesium/Widgets/widgets.css);
+    </style>
+
+    <script type="application/x-javascript">
+        var deg2rad = Math.PI / 180;
+        var rad2deg = 180 / Math.PI;
+
+        var pitch = 0;
+        var roll = 0;
+        var yaw = 10;
+
+        var line1item = "cs.altasl";
+        var line2item = "cs.ter_alt";
+
+        function graphitem(item) {
+            line1item = "cs." + item;
+        }
+
+        function init() {
+            var smoothie = new SmoothieChart();
+
+            smoothie.streamTo(document.getElementById("graphcanvas"), 250);
+
+            // Data
+            var line1 = new TimeSeries();
+            var line2 = new TimeSeries();
+
+            // Add to SmoothieChart
+            smoothie.addTimeSeries(line1);
+            smoothie.addTimeSeries(line2);
+
+            draw();
+        }
+
+        function draw() {
+            setTimeout(draw, 1);
+
+            var canvas = document.getElementById("canvas");
+            if (canvas.getContext) {
+                var ctx = canvas.getContext("2d");
+
+                ctx.save();
+
+                ctx.translate(canvas.width / 2, canvas.height / 2);
+
+                ctx.rotate(roll * deg2rad);
+
+                var font = "Arial";
+                var fontsize = canvas.height / 30;
+                var fontoffset = fontsize - 10;
+
+                var halfwidth = canvas.width / 2;
+                var halfheight = canvas.height / 2;
+
+                var every5deg = -canvas.height / 60;
+
+                var pitchoffset = -pitch * every5deg;
+
+                var x = Math.sin(-roll * deg2rad);
+                var y = Math.cos(-roll * deg2rad);
+
+                var gradObj = ctx.createLinearGradient(0, -halfheight * 2, 0, halfheight * 2);
+                gradObj.addColorStop(0.0, "Blue");
+                var offset = 0.5 + pitchoffset / canvas.height / 2;
+                if (offset < 0) {
+                    offset = 0;
+                }
+                if (offset > 1) {
+                    offset = 1;
+                }
+                gradObj.addColorStop(offset, "LightBlue");
+                gradObj.addColorStop(offset, "#9bb824");
+                gradObj.addColorStop(1.0, "#414f07");
+
+                ctx.fillStyle = gradObj;
+                ctx.rect(-halfwidth * 2, -halfheight * 2, halfwidth * 4, halfheight * 4);
+                ctx.fill();
+
+                var lengthshort = canvas.width / 12;
+                var lengthlong = canvas.width / 8;
+
+                for (var a = -90; a <= 90; a += 5) {
+                    if (a >= pitch - 34 && a <= pitch + 25) {
+                        if (a % 10 == 0) {
+                            if (a == 0) {
+                                DrawLine(ctx, "White", 4, canvas.width / 2 - lengthlong - halfwidth, pitchoffset + a * every5deg, canvas.width / 2 + lengthlong - halfwidth, pitchoffset + a * every5deg);
+                            } else {
+                                DrawLine(ctx, "White", 4, canvas.width / 2 - lengthlong - halfwidth, pitchoffset + a * every5deg, canvas.width / 2 + lengthlong - halfwidth, pitchoffset + a * every5deg);
+                            }
+                            drawstring(ctx, a, font, fontsize + 2, "White", canvas.width / 2 - lengthlong - 30 - halfwidth - (fontoffset * 1.7), pitchoffset + a * every5deg - 8 - fontoffset);
+                        } else {
+                            DrawLine(ctx, "White", 4, canvas.width / 2 - lengthshort - halfwidth, pitchoffset + a * every5deg, canvas.width / 2 + lengthshort - halfwidth, pitchoffset + a * every5deg);
+                        }
+                    }
+                }
+
+                lengthlong = canvas.height / 66;
+
+                var extra = canvas.height / 15 * 4.9;
+
+                var lengthlongex = lengthlong + 2;
+
+                var pointlist = new Array();
+                pointlist[0] = 0;
+                pointlist[1] = -lengthlongex * 2 - extra;
+                pointlist[2] = -lengthlongex;
+                pointlist[3] = -lengthlongex - extra;
+                pointlist[4] = lengthlongex;
+                pointlist[5] = -lengthlongex - extra;
+
+                DrawPolygon(ctx, "RED", 4, pointlist);
+
+                for (var a = -60; a <= 60; a += 15) {
+                    ctx.restore();
+                    ctx.save();
+                    ctx.translate(canvas.width / 2, canvas.height / 2);
+                    ctx.rotate(a * deg2rad);
+                    drawstring(ctx, a.toString(), font, fontsize, "White", 0 - 6 - fontoffset, -lengthlong * 8 - extra + 10);
+                    DrawLine(ctx, "White", 4, 0, -lengthlong * 3 - extra, 0, -lengthlong * 3 - extra - lengthlong);
+                }
+
+                ctx.restore();
+                ctx.save();
+
+                DrawEllipse(ctx, "red", 4, halfwidth - 10, halfheight - 10, 20, 20);
+                DrawLine(ctx, "red", 4, halfwidth - 10 - 10, halfheight, halfwidth - 10, halfheight);
+                DrawLine(ctx, "red", 4, halfwidth - 10 + 20, halfheight, halfwidth - 10 + 20 + 10, halfheight);
+                DrawLine(ctx, "red", 4, halfwidth - 10 + 20 / 2, halfheight - 10, halfwidth - 10 + 20 / 2, halfheight - 10 - 10);
+            }
+        }
+
+        function DrawPolygon(ctx, color, linewidth, pointlist) {
+            ctx.beginPath();
+            ctx.moveTo(pointlist[0], pointlist[1]);
+            for (var pl = 2; pl < pointlist.length; pl += 2) {
+                ctx.lineTo(pointlist[pl], pointlist[pl + 1]);
+            }
+            ctx.lineTo(pointlist[0], pointlist[1]);
+            ctx.lineWidth = linewidth;
+            ctx.strokeStyle = color;
+            ctx.stroke();
+        }
+
+        function DrawEllipse(ctx, color, linewidth, x, y, w, h) {
+            var kappa = .5522848,
+                ox = (w / 2) * kappa,
+                oy = (h / 2) * kappa,
+                xe = x + w,
+                ye = y + h,
+                xm = x + w / 2,
+                ym = y + h / 2;
+
+            ctx.beginPath();
+            ctx.moveTo(x, ym);
+            ctx.bezierCurveTo(x, ym - oy, xm - ox, y, xm, y);
+            ctx.bezierCurveTo(xm + ox, y, xe, ym - oy, xe, ym);
+            ctx.bezierCurveTo(xe, ym + oy, xm + ox, ye, xm, ye);
+            ctx.bezierCurveTo(xm - ox, ye, x, ym + oy, x, ym);
+            ctx.closePath();
+            ctx.lineWidth = linewidth;
+            ctx.strokeStyle = color;
+            ctx.stroke();
+        }
+
+        function DrawLine(ctx, color, linewidth, x, y, tox, toy) {
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            ctx.lineTo(tox, toy);
+            ctx.lineWidth = linewidth;
+            ctx.strokeStyle = color;
+            ctx.stroke();
+        }
+
+        function drawstring(ctx, str, font, size, color, x, y) {
+            ctx.font = size + "px " + font;
+            ctx.fillStyle = color;
+            ctx.fillText(str, x, y);
+        }
+
+        function load() {
+            init();
+        }
+
+        window.onload = load;
+    </script>
+</head>
+
+<body>
+    <div id="graphdiv" style="width:100%;height:20%;">
+        <canvas id="graphcanvas" height="0" width="0"></canvas>
+    </div>
+
+    <div id="contentDiv" style="width:100%;height:100%;">
+        <canvas id="canvas" width="190" height="175" style="border:1px solid #000000;"></canvas>
+    </div>
+<script>
+	    function pitchValueChanged(percentage) {
+		    pitch = percentage; // Update the global variable 'data' with the new percentage
+
+		}
+	    function rollValueChanged(percentage) {
+		    roll = percentage; // Update the global variable 'data' with the new percentage
+
+		}
+	    function yawValueChanged(percentage) {
+		    yaw = percentage; // Update the global variable 'data' with the new percentage
+
+		}
+
+
+        var options;
+        var data;
+        var chart;
+
+        function addData() {
+            if (data.getNumberOfRows() > 200)
+                data.removeRow(0);
+
+            data.addRows([
+                [new Date(), eval(line1item), eval(line2item)]
+            ]);
+        }
+
+        function redrawchart() {
+            setTimeout("redrawchart()", 1000);
+
+            chart.draw(data, options);
+        }
+    </script>
+</body>
+
+</html>
+

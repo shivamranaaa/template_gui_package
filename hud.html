@@ -1,0 +1,436 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="format-detection" content="telephone=no">
+    <title>Hud</title>
+    <script src="http://smoothiecharts.org/smoothie.js"></script>
+    <script src="/mav/Cesium/Cesium.js"></script>
+
+    <script src="/mav/bundle.js"></script>
+
+    <style>
+        @import url(/mav/Cesium/Widgets/widgets.css);
+    </style>
+
+    <script type="application/x-javascript"> 
+
+                        var deg2rad = Math.PI / 180;
+                        var rad2deg = 180 / Math.PI;
+
+                        var pitch =0;
+                        var roll =0;
+                        var yaw =0;
+
+                        var line1item = "cs.altasl";
+                        var line2item = "cs.ter_alt";
+
+                        function graphitem(item)
+                        {
+                            line1item = "cs."+item;
+                        }
+
+                        function init() {
+
+                                var smoothie = new SmoothieChart();
+
+                        smoothie.streamTo(document.getElementById("graphcanvas"),250);
+
+                        // Data
+                        var line1 = new TimeSeries();
+                        var line2 = new TimeSeries();
+
+			    // Add to SmoothieChart
+			   
+			    smoothie.addTimeSeries(line1);
+			    smoothie.addTimeSeries(line2);
+
+                        
+
+                        draw();
+
+                        }
+
+
+                        function draw() {
+
+                        setTimeout ( "draw()", 1 );
+
+                          var canvas = document.getElementById("canvas");
+                          if (canvas.getContext) {
+                            var ctx = canvas.getContext("2d");
+
+                            ctx.save();
+
+                            ctx.translate(canvas.width/2,canvas.height/2);
+
+                            ctx.rotate(roll * deg2rad);
+
+                            var font = "Arial";
+                            var fontsize = canvas.height/45;
+                            var fontoffset = fontsize - 10;
+
+                            var halfwidth = canvas.width/2;
+                            var halfheight = canvas.height/2;
+
+                            var every5deg = -canvas.height / 60;
+
+                            var pitchoffset = -pitch * every5deg;
+
+                            var x = Math.sin(-roll * deg2rad);
+                            var y = Math.cos(-roll * deg2rad);
+
+                     gradObj = ctx.createLinearGradient(0,-halfheight * 2 ,0, halfheight *2);
+                     gradObj.addColorStop(0.0, "rgba(0,0,0,0)");
+                     var offset = 0.5 + pitchoffset / canvas.height / 2 ;
+                     if (offset < 0) {
+                        offset = 0;
+                     }
+                     if (offset > 1) {
+                        offset = 1;
+                     }
+                     gradObj.addColorStop(offset, "rgba(0,0,0,0)");
+                     gradObj.addColorStop(offset, "rgba(0,0,0,0)");
+                     gradObj.addColorStop(1.0, "rgba(0,0,0,0)");
+
+                     ctx.fillStyle = gradObj;
+                     ctx.rect(-halfwidth * 2, -halfheight *2, halfwidth * 4, halfheight * 4);
+                     ctx.fill();
+
+                                    var lengthshort = canvas.width / 12;
+                                    var lengthlong = canvas.width / 9;
+                                    var crosshairVerticalOffset = 90; 
+                                    for (var a = -90; a <= 90; a += 5)
+                                    {
+                                        // limit to 40 degrees
+                                        if (a >= pitch - 15 && a <= pitch + 15)
+                                        {
+                                            if (a % 10 == 0)
+                                            {
+                                                if (a == 0)
+                                                {
+                                                    DrawLine(ctx,"white",4, canvas.width / 2 - lengthlong - halfwidth, pitchoffset + a * every5deg+crosshairVerticalOffset, canvas.width / 2 + lengthlong - halfwidth, pitchoffset + a * every5deg+crosshairVerticalOffset);
+                                                }
+                                                else
+                                                {
+                                                    DrawLine(ctx,"#39FF14",4, canvas.width / 2 - lengthlong - halfwidth, pitchoffset + a * every5deg+crosshairVerticalOffset, canvas.width / 2 + lengthlong - halfwidth, pitchoffset + a * every5deg+crosshairVerticalOffset);
+                                                }
+                                                drawstring(ctx, a, font, fontsize + 2, "#39FF14", canvas.width / 2 - lengthlong - 30 - halfwidth - (fontoffset * 1.7), pitchoffset + a * every5deg - 8 - fontoffset+crosshairVerticalOffset);
+                                            }
+                                            else
+                                            {
+                                                DrawLine(ctx,"#39FF14",4, canvas.width / 2 - lengthshort - halfwidth, pitchoffset + a * every5deg+crosshairVerticalOffset, canvas.width / 2 + lengthshort - halfwidth, pitchoffset + a * every5deg+crosshairVerticalOffset);
+                                            }
+                                        }
+                                    }
+
+                                    lengthlong = canvas.height / 90;
+
+                                    var extra = canvas.height /16 * 5.4;
+
+                                    var lengthlongex = lengthlong + 2;
+
+                     var pointlist = new Array();
+                     pointlist[0] = 0;
+                     pointlist[1] = -lengthlongex * 2 - extra;
+                     pointlist[2] = -lengthlongex;
+                     pointlist[3] = -lengthlongex - extra;
+                     pointlist[4] = lengthlongex;
+                     pointlist[5] = -lengthlongex - extra;
+
+                        DrawPolygon(ctx,"RED",2,pointlist)
+
+                                        for (var a = -60; a <= 60; a += 15)
+                                    {
+                                        ctx.restore();
+                                        ctx.save();
+                                        ctx.translate(canvas.width / 2, canvas.height / 2);
+                                        ctx.rotate(a * deg2rad);
+                                        drawstring(ctx, a.toString(), font, fontsize, "#39FF14", 0 - 6 - fontoffset, -lengthlong * 8 - extra + 10);
+                                        DrawLine(ctx,"#39FF14",4, 0, -lengthlong * 3 - extra, 0,
+                                        -lengthlong * 3 - extra - lengthlong);
+
+                                    }
+
+                                    ctx.restore();
+                                    ctx.save();
+
+                                    // Increase this value to move the crosshair further down
+
+                                    DrawEllipse(ctx,"red",4,halfwidth - 10, halfheight - 10 + crosshairVerticalOffset, 20, 20);
+                                    DrawLine(ctx,"red",4, halfwidth - 10 - 10, halfheight + crosshairVerticalOffset, halfwidth - 10, halfheight + crosshairVerticalOffset);
+                                    DrawLine(ctx,"red",4, halfwidth - 10 + 20, halfheight + crosshairVerticalOffset, halfwidth - 10 + 20 + 10, halfheight + crosshairVerticalOffset);
+                                    DrawLine(ctx,"red",4, halfwidth - 10 + 20 / 2, halfheight - 10 + crosshairVerticalOffset, halfwidth - 10 + 20 / 2, halfheight - 10 - 10 + crosshairVerticalOffset);
+
+
+              ///////////////////////
+
+              var headbg = {Left:0, Top: 0, Width: canvas.width - 0, Height: canvas.height / 14, Bottom: canvas.height / 14,  Right: canvas.width - 0 };
+
+              _targetheading = yaw;
+              _heading = yaw;
+              _groundcourse = yaw;
+
+              DrawRectangle(ctx,"#39FF14", headbg);
+
+
+                                //bottom line
+                                DrawLine(ctx, "#39FF14", 2, headbg.Left + 5, headbg.Bottom - 5, headbg.Width - 5,
+                                    headbg.Bottom - 5);
+
+                                var space = (headbg.Width - 10) / 120.0;
+                                var start = Math.round((_heading - 60), 1);
+
+                                // draw for outside the 60 deg
+                                if (_targetheading < start)
+                                {
+
+                                    DrawLine(ctx,"#39FF14", 2, headbg.Left + 5 + space * 0, headbg.Bottom,
+                                        headbg.Left + 5 + space * (0), headbg.Top);
+                                }
+                                if (_targetheading > _heading + 60)
+                                {
+
+                                    DrawLine(ctx,"#39FF14", 2, headbg.Left + 5 + space * 60, headbg.Bottom,
+                                        headbg.Left + 5 + space * (60), headbg.Top);
+                                }
+
+                                for (var a = start; a <= _heading + 60; a += 1)
+                                {
+                                    // target heading
+                                    if (( (a + 360) % 360) ==  Math.round(_targetheading))
+                                    {
+
+                                        DrawLine(ctx,"#39FF14", 2, headbg.Left + 5 + space * (a - start),
+                                            headbg.Bottom, headbg.Left + 5 + space * (a - start), headbg.Top);
+                                    }
+
+                                    if (( (a + 360) % 360) ==  Math.round(_groundcourse))
+                                    {
+
+                                        DrawLine(ctx,"#39FF14", 2, headbg.Left + 5 + space * (a - start),
+                                            headbg.Bottom, headbg.Left + 5 + space * (a - start), headbg.Top);
+
+                                    }
+
+                                    if ( a % 15 == 0)
+                                    {
+                                        DrawLine(ctx,"#39FF14", 2, headbg.Left + 5 + space * (a - start),
+                                            headbg.Bottom - 5, headbg.Left + 5 + space * (a - start), headbg.Bottom - 10);
+                                        var disp =  a;
+                                        if (disp < 0)
+                                            disp += 360;
+                                        disp = disp % 360;
+                                        if (disp == 0)
+                                        {
+                                            drawstring(ctx, "N", font, fontsize + 4, "#39FF14",
+                                                headbg.Left - 5 + space * (a - start) - fontoffset,
+                                                headbg.Bottom - 24 -  (fontoffset * 1.7));
+                                        }
+                                        else if (disp == 45)
+                                        {
+                                            drawstring(ctx, "NE", font, fontsize + 4, "#39FF14",
+                                                headbg.Left - 5 + space * (a - start) - fontoffset,
+                                                headbg.Bottom - 24 -  (fontoffset * 1.7));
+                                        }
+                                        else if (disp == 90)
+                                        {
+                                            drawstring(ctx, "E", font, fontsize + 4, "#39FF14",
+                                                headbg.Left - 5 + space * (a - start) - fontoffset,
+                                                headbg.Bottom - 24 -  (fontoffset * 1.7));
+                                        }
+                                        else if (disp == 135)
+                                        {
+                                            drawstring(ctx, "SE", font, fontsize + 4, "#39FF14",
+                                                headbg.Left - 5 + space * (a - start) - fontoffset,
+                                                headbg.Bottom - 24 -  (fontoffset * 1.7));
+                                        }
+                                        else if (disp == 180)
+                                        {
+                                            drawstring(ctx, "S", font, fontsize + 4, "#39FF14",
+                                                headbg.Left - 5 + space * (a - start) - fontoffset,
+                                                headbg.Bottom - 24 -  (fontoffset * 1.7));
+                                        }
+                                        else if (disp == 225)
+                                        {
+                                            drawstring(ctx, "SW", font, fontsize + 4, "#39FF14",
+                                                headbg.Left - 5 + space * (a - start) - fontoffset,
+                                                headbg.Bottom - 24 -  (fontoffset * 1.7));
+                                        }
+                                        else if (disp == 270)
+                                        {
+                                            drawstring(ctx, "W", font, fontsize + 4, "#39FF14",
+                                                headbg.Left - 5 + space * (a - start) - fontoffset,
+                                                headbg.Bottom - 24 -  (fontoffset * 1.7));
+                                        }
+                                        else if (disp == 315)
+                                        {
+                                            drawstring(ctx, "NW", font, fontsize + 4, "#39FF14",
+                                                headbg.Left - 5 + space * (a - start) - fontoffset,
+                                                headbg.Bottom - 24 -  (fontoffset * 1.7));
+                                        }
+                                        else
+                                        {
+                                            drawstring(ctx, Math.round(disp % 360,0), font, fontsize,
+                                                "#39FF14", headbg.Left - 5 + space * (a - start) - fontoffset,
+                                                headbg.Bottom - 24 -  (fontoffset * 1.7));
+                                        }
+                                    }
+                                    else if ( a % 5 == 0)
+                                    {
+                                        DrawLine(ctx,"#39FF14", 2, headbg.Left + 5 + space * (a - start),
+                                            headbg.Bottom - 5, headbg.Left + 5 + space * (a - start), headbg.Bottom - 10);
+                                    }
+                                }
+
+                          }
+
+                        }
+                        function DrawEllipse(ctx,color,linewidth,x1,y1,width,height) {
+                            ctx.lineWidth = linewidth;
+                            ctx.strokeStyle = color;
+                            ctx.beginPath();
+                            ctx.moveTo(x1 + width / 2,y1 + height);
+                                            var x, y;
+                                    for (var i = 0; i <= 360; i += 1)
+                                    {
+                                        x = Math.sin(i * deg2rad) * width / 2;
+                                        y = Math.cos(i * deg2rad) * height  / 2;
+                                        x = x + x1 + width / 2;
+                                        y = y + y1 + height / 2;
+                                        ctx.lineTo(x,y);
+                                    }
+
+
+                            ctx.stroke();
+                            ctx.closePath();
+                        }
+                        function DrawLine(ctx,color,width,x1,y1,x2,y2) {
+                            ctx.lineWidth = width;
+                            ctx.strokeStyle = color;
+                            ctx.beginPath();
+                            ctx.moveTo(x1,y1);
+                            ctx.lineTo(x2,y2);
+                            ctx.stroke();
+                            ctx.closePath();
+                        }
+                        function DrawPolygon(ctx,color,width,list) {
+                            ctx.lineWidth = width;
+                            ctx.strokeStyle = color;
+                            ctx.beginPath();
+                            ctx.moveTo(list[0],list[1]);
+                            for ( var i=2, len=list.length; i<len; i+=2 ){
+                                ctx.lineTo(list[i],list[i+1]);
+                            }
+                            ctx.lineTo(list[0],list[1]);
+                            ctx.stroke();
+                            ctx.closePath();
+                        }
+                        function DrawRectangle(ctx,color, headbg) {
+                            DrawLine(ctx,color,2,headbg.Left, headbg.Top, headbg.Right, headbg.Top);
+                            DrawLine(ctx,color,2,headbg.Right, headbg.Top, headbg.Right, headbg.Bottom);
+                            DrawLine(ctx,color,2,headbg.Right, headbg.Bottom, headbg.Left, headbg.Bottom);
+                            DrawLine(ctx,color,2,headbg.Left, headbg.Bottom, headbg.Left, headbg.Top);
+                        }
+                        function  drawstring(ctx,string,font,fontsize,color,x,y) {
+                            ctx.font = fontsize + "pt "+font;
+                            ctx.fillStyle = color;
+                            ctx.fillText(string,x,y + fontsize);
+                                                               }
+    </script>
+    <style>
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            height: 100%;
+        }
+        body, html {
+        height: 100%;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #container {
+        display: flex;
+        flex-direction: column;
+        resize: horizontal;
+        overflow: auto;
+        max-width: 99%;
+        max-height: 100%;
+    }
+
+    #canvas {
+        max-width: 99%;
+        max-height: 100%;
+    }
+
+    /* #graphcanvas {
+        max-width: 100%;
+        max-height: 100%;
+    } */
+
+    #serverStatus {
+        width: 500px;
+        overflow-y: auto;
+        flex-grow: 0;
+    }
+    </style>
+</head>
+
+<body onload="init();">
+    <div style="height: 100%; display: flex; flex-direction: column; float: left; resize: horizontal; overflow: auto;">
+        <div style="float: left;">
+            <canvas id="canvas" width="711" height="300">
+                <p>
+                    This example requires a browser that supports the
+                    <a href="http://www.w3.org/html/wg/html5/">HTML5</a>
+                    &lt;canvas&gt; feature.
+                </p>
+            </canvas>
+            <canvas id="graphcanvas" width="500" height="0"></canvas><br />
+        </div>
+        <div id="serverStatus" style="width: 500px; overflow-y: auto; flex-grow: 0;"></div>
+    </div>
+    <div style="height: 100%; display: flex; flex-direction: column; resize: horizontal; overflow: auto;">
+
+        <div id="cesiumContainer" style="height: 50%; display: none;"></div>
+        <div id="map"></div>
+    </div>
+    <div id="pitch"></div>
+	<div id="roll"></div>
+	<div id="yaw"></div>
+
+    <script>
+
+
+        var options;
+        var data;
+        var chart;
+
+        function addData() {
+            if (data.getNumberOfRows() > 200)
+                data.removeRow(0);
+
+            data.addRows([
+                [new Date(), eval(line1item), eval(line2item)]
+            ]);
+        }
+
+        function redrawchart() {
+            setTimeout("redrawchart()", 1000);
+
+            chart.draw(data, options);
+        }
+    </script>
+
+
+</body>
+</html>

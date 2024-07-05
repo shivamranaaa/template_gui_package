@@ -33,27 +33,47 @@ project(template_gui_package)  ## this package name is the name of the directory
 ##  CONFIGURE THIS FILE HERE  ##
 ################################
 
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+set(Qt5_DIR "/usr/lib/aarch64-linux-gnu/cmake/Qt5")
+find_package(OpenCV 4 REQUIRED)
+
 set(ROS_DEPENDS
   roscpp
   std_msgs
+  sensor_msgs
+  cv_bridge
+  image_transport
   )
+
+find_package(OpenCV REQUIRED)
+find_package(MAVSDK REQUIRED)
+
+find_package(Qt5Widgets REQUIRED)
+find_package(Qt5PrintSupport REQUIRED)
+find_package(Qt5WebEngineWidgets REQUIRED)
+find_package(Qt5 COMPONENTS Widgets PrintSupport WebEngineWidgets UiTools REQUIRED)
+
 
 set(EXTERNAL_DEPENDS
   Qt5Widgets
   Qt5PrintSupport
-  #OpenCV
+  Qt5WebEngineWidgets  
+  OpenCV
   )
 
 set(EXTERNAL_DEPENDS_LIB
   Qt5::Widgets
   Qt5::PrintSupport
+  Qt5::WebEngineWidgets 
   Qt5::Core
-  #${OpenCV_LIBS}
+  ${OpenCV_LIBS}
   )
 
-set(INCLUDE_DIRECTORIES
-  #${OpenCV_LIBS}
-  )
+
+set(INCLUDE_DIRECTORIES  ${OpenCV_LIBS}  )
 
 
 ##########################################
@@ -123,6 +143,8 @@ set(CMAKE_AUTORCC ON)  #this needs to be on so cmake will know what to do with Q
 #find_package(Qt5PrintSupport)
 #find all the qt UI stuff
 file(GLOB_RECURSE UI
+    #"/home/kamikaze/Desktop/catkin_ws/src/template_gui_package/include/template_gui_package/hello_gui.ui"
+    #"/home/kamikaze/Desktop/catkin_ws/src/template_gui_package/include/template_gui_package/MainWindow.ui"
     "include/${PROJECT_NAME}/*.ui"
 )
 
@@ -155,7 +177,7 @@ foreach(NODE_FILE ${NODES})
 
   add_executable(${NODE_NAME} ${NODE_FILE} ${HDRS} ${SRCS} ${UI} ${QRC})
   add_dependencies(${NODE_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-  target_link_libraries (${NODE_NAME} ${catkin_LIBRARIES}  ${EXTERNAL_DEPENDS_LIB})
+  target_link_libraries (${NODE_NAME} ${catkin_LIBRARIES}  ${EXTERNAL_DEPENDS_LIB} MAVSDK::mavsdk serial Qt5::Widgets Qt5::PrintSupport Qt5::WebEngineWidgets Qt5::UiTools)
   target_include_directories(${NODE_NAME} PRIVATE "include/${PROJECT_NAME}/")
 
   list(APPEND NODE_LIST ${NODE_NAME})
@@ -169,4 +191,9 @@ install(TARGETS ${NODE_LIST}
 install(DIRECTORY launch/
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch
   )
-
+  
+if(NOT MSVC)
+    add_compile_options(template_gui_package PRIVATE -Wall -Wextra)
+else()
+    add_compile_options(template_gui_package PRIVATE -WX -W2)
+endif()
